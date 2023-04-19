@@ -7,4 +7,4 @@ How to run:
 vvp <nume_fisier>.vvp
 
 How to view waves:
-gtkwave <file>.vcd
+gtkwave <nume_fisier>.vcd
