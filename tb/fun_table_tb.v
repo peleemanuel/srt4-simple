@@ -1,4 +1,5 @@
 `timescale 1ns/1ns
+`include "../src/function_table.v"
 
 module fun_tbl_tb;
   reg [3:0] b;
