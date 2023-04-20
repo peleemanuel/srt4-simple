@@ -1,3 +1,5 @@
+`timescale 1ns/1ns
+
 module adder_tb;
   reg [8:0]i_tb,j_tb;
   wire [8:0]o_tb;
