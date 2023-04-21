@@ -97,7 +97,7 @@ always @(*) begin
         S18 : state_next = S19;
         S19 : state_next = S20;
         S20 : begin
-            if(~cnt2[0] & ~cnt2[1]) state_next = S22;
+            if(~cnt2[0] & ~cnt2[1] & ~cnt2[2]) state_next = S22;
             else state_next = S21;
         end
         S21: state_next = S20;
