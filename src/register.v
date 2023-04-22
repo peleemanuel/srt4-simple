@@ -77,15 +77,35 @@ end
 endmodule
 
 module aprim (
-  input c0,
+  input c0, c3, c5, c6, c12,
   input [1:0]inbit,
   input [7:0]d,
   output reg [1:0]outbit,
   output reg [7:0]q
 );
   
-always @(posedge c0) begin
+always @(posedge c0 or posedge c3 or posedge c5 or posedge c6 or posedge c12) begin
+  if(c0) begin
+    q <= '0;
+  end
 
+  else if (c3) begin
+    q[7:2] <= q[5:0];
+
+    if(c5) begin
+      q[1:0] <= 2'b01;
+    end
+
+    else if (c6) begin
+      q[1:0] <= 2'b10;
+    end
+
+    else 
+      q[1:0] <= 2'b00;
+  end
+
+  else if (c12) //! trebuie verificat pentru ca nu stiu daca este c8 sau c12
+    q <= d;
 end
 
 endmodule
@@ -94,11 +114,21 @@ module b (
   input c0,
   input [1:0]inbit,
   input [7:0]d,
-  output reg [1:0]outbit,
+  output reg [1:0]outbit, //! trebuie verificata logica de pe outbit din acest modul
   output reg [7:0]q
 );
 
-always @(posedge c0) begin
+always @(posedge c1 or posedge c2) begin
+  
+  if(c1) begin
+    q <= d;
+  end
+
+  else if(c2) begin
+    outbit[1] <= q[7];
+    q[7:1] <= q[6:0];
+    q[0] <= 1'b0;
+  end
 
 end
 
