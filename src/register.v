@@ -67,3 +67,50 @@ function [w-1:0] Shift_k(input [w-1:0]P, input [2:0]k);
 endfunction
 
 endmodule
+
+// dim 9
+module p (
+  input c0,c2,
+  input [1:0]inbit,
+  input d,
+  output outbit,
+  output reg q
+);
+
+
+always @(posedge c0, posedge c2, posedge c3, posedge c8) begin
+  if(c0) q <= 0;
+  else if(c2) begin
+    q[8:1] <= q[7:0];
+    q[0] <= inbit[0];
+  end 
+  else if(c3) begin
+  begin
+      q[8:2] <= q[6:0];
+      q[1:0] <= inbit;
+    end
+  end
+  else if(c8) begin
+   q <= d;
+  end
+end
+
+endmodule
+//restul de 8
+module a (
+  ports
+);
+  
+endmodule
+
+module aprim (
+  ports
+);
+  
+endmodule
+
+module b (
+  
+);
+  
+endmodule
