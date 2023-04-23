@@ -65,8 +65,8 @@ always @(*) begin
         S1 : state_next = S2;
         S2 : state_next = S3;
         S3 : begin 
-            if(b7) state_next = S4;
-            else if(~b7) state_next = S5;
+            if(~b7) state_next = S4;
+            else if(b7) state_next = S5;
         end
         S4 : state_next = S3;
         S5 : begin
