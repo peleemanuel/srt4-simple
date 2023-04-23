@@ -1,4 +1,4 @@
-module mux #(parameter WIDTH = 8)
+module mux #(parameter WIDTH = 9)
   (
    input [WIDTH-1:0] data_in0,  // Input data lines
    input [WIDTH-1:0] data_in1,  //nu merge sa fac array cu astea, imi zice ca e de systemverilog :(
