@@ -2,7 +2,7 @@ module p (
   input c0,c2,c3,c8,c14,
   input [1:0]inbit,
   input [8:0]d, // intrarea pentru registru 
-  output reg [1:0]outbit, // cand shiftez cu 2 pozitii, o sa imi iasa 2 biti
+  //output reg [1:0]outbit, // cand shiftez cu 2 pozitii, o sa imi iasa 2 biti
   output reg [8:0]q //iesirea pentru registru
 );
 
@@ -47,9 +47,9 @@ always @(posedge c0 or posedge c2 or posedge c3 or posedge c4 or posedge c7 or p
   end
 
   else if(c2) begin
-    outbit[0] <= q[7];
+    outbit[1] <= q[7];
     q[7:1] <= q[6:0];
-    q[0] <= inbit[0];
+    q[0] <= inbit[1];
   end
 
   else if(c3) begin
@@ -78,9 +78,9 @@ endmodule
 
 module aprim (
   input c0, c3, c5, c6, c12,
-  input [1:0]inbit,
+  //input [1:0]inbit,
   input [7:0]d,
-  output reg [1:0]outbit,
+  //output reg [1:0]outbit,
   output reg [7:0]q
 );
   
@@ -105,14 +105,14 @@ always @(posedge c0 or posedge c3 or posedge c5 or posedge c6 or posedge c12) be
   end
 
   else if (c12) //! trebuie verificat pentru ca nu stiu daca este c8 sau c12
-    q <= d;
+    q <= q + 1;
 end
 
 endmodule
 
 module b (
   input c0,
-  input [1:0]inbit,
+  //input [1:0]inbit,
   input [7:0]d,
   output reg [1:0]outbit, //! trebuie verificata logica de pe outbit din acest modul
   output reg [7:0]q
