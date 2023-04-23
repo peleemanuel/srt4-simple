@@ -86,7 +86,7 @@ module aprim (
   
 always @(posedge c0 or posedge c3 or posedge c5 or posedge c6 or posedge c12) begin
   if(c0) begin
-    q <= '0;
+    q <= 7'b0;
   end
 
   else if (c3) begin

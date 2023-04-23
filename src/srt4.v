@@ -1,8 +1,8 @@
 module srt4 (
     input [7:0] inbus,
-    input beginSignal, clk, rst_b
+    input beginSignal, clk, rst_b,
     output [7:0] outbus,
-    output reg endSignal
+    output endSignal
 );
 
 
@@ -107,12 +107,12 @@ b B_register(
     .outbit(ab_connect),
     .q(b_out_wire)
 );
-
+wire dump;
 demux demux1(
     .sel(control_signals_wire[13]),
     .data_in(adder_out),
     .data_out0(p_in_wire),
-    .data_out1(a_in_wire)
+    .data_out1({dump, a_in_wire})
 );
 
 mux muxj(
