@@ -35,14 +35,19 @@ endmodule
 
 module a (
   input c0,c2,c3,c4,c7,c13,
+  input rst_b,
   input [1:0]inbit,
   input [7:0]d,
   output reg [1:0]outbit,
   output reg [7:0]q
 );
   
-always @(posedge c0 or posedge c2 or posedge c3 or posedge c4 or posedge c7 or posedge c13) begin
-  if(c0) begin
+always @(negedge rst_b or posedge c0 or posedge c2 or posedge c3 or posedge c4 or posedge c7 or posedge c13) begin
+  if(!rst_b) begin
+    q <= 0;
+  end
+  
+  else if(c0) begin
     q <= d;
   end
 
@@ -111,7 +116,7 @@ end
 endmodule
 
 module b (
-  input c0,
+  input c1,c2,
   //input [1:0]inbit,
   input [7:0]d,
   output reg [1:0]outbit, //! trebuie verificata logica de pe outbit din acest modul

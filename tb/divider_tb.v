@@ -38,7 +38,7 @@ initial begin
     #2 rst_b = 0;
     #3 rst_b = 1;    
     #15 beginSignal = 0;
-    #30 inbus = 5; 
+    #10 inbus = 5; 
 end
 
 endmodule

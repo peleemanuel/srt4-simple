@@ -1,14 +1,14 @@
 module srt4 (
     input [7:0] inbus,
     input beginSignal, clk, rst_b,
-    output [7:0] outbus,
+    output reg [7:0] outbus,
     output endSignal
 );
 
 
 wire [16:0]control_signals_wire;
 wire [8:0] p_in_wire, p_out_wire;
-wire [7:0] a_in_wire, a_out_wire, aprim_in_wire, aprim_out_wire, b_in_wire, b_out_wire;
+wire [7:0] a_in_wire, a_in_wire_temp, a_out_wire, aprim_in_wire, aprim_out_wire, b_in_wire, b_out_wire;
 wire [1:0] pa_connect, ab_connect;
 wire [1:0] cnt1;
 wire [2:0] cnt2;
@@ -17,23 +17,19 @@ wire [8:0] a_9_bits, aprim_9_bits, b_9_bits;
 wire [8:0] adder_i, adder_j, intermediate_adder_j;
 
 assign a_9_bits = {1'b0,a_out_wire};
-assign b_9_bits = (c10) ? {b_out_wire,1'b0} : {1'b0, b_out_wire};
+assign b_9_bits = (control_signals_wire[10]) ? {b_out_wire,1'b0} : {1'b0, b_out_wire};
 assign aprim_9_bits = {1'b0,aprim_out_wire};
-assign adder_j = (c9) ? (~intermediate_adder_j + 1) : intermediate_adder_j;
+assign adder_j = (control_signals_wire[9]) ? (~intermediate_adder_j + 1) : intermediate_adder_j;
+assign a_in_wire_temp = (control_signals_wire[0]) ? inbus : 8'b0000_0000;
+assign a_in_wire = (control_signals_wire[0]) ? inbus : a_in_wire_temp;
+assign b_in_wire = (control_signals_wire[1]) ? inbus : 8'b0000_0000;
 
 always @(*) begin
-    outbus = 0;
+    outbus = 8'b0000_0000;
     if(control_signals_wire[15])
         outbus = a_out_wire;
     else if(control_signals_wire[16])
         outbus = p_out_wire[7:0];
-end
-
-always @(*) begin
-    if(control_signals_wire[0])
-        a_in_wire = inbus;
-    else if(control_signals_wire[1])
-        b_in_wire = inbus;
 end
 
 count1 countOne(
@@ -82,6 +78,7 @@ a A_register(
     .c4(control_signals_wire[4]),
     .c7(control_signals_wire[7]),
     .c13(control_signals_wire[13]),
+    .rst_b(rst_b),
     .inbit(ab_connect),
     .d(a_in_wire),
     .outbit(pa_connect),
@@ -101,18 +98,20 @@ aprim Aprim_register(
 );
 
 b B_register(
-    .c0(control_signals_wire[0]),
+    .c1(control_signals_wire[1]),
+    .c2(control_signals_wire[2]),
     //.inbit(),
     .d(b_in_wire),
     .outbit(ab_connect),
     .q(b_out_wire)
 );
 wire dump;
+
 demux demux1(
     .sel(control_signals_wire[13]),
     .data_in(adder_out),
     .data_out0(p_in_wire),
-    .data_out1({dump, a_in_wire})
+    .data_out1({dump, a_in_wire_temp})
 );
 
 mux muxj(
