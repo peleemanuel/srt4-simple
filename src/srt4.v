@@ -5,6 +5,7 @@ module srt4 (
     output endSignal
 );
 
+
 wire [16:0]control_signals_wire;
 
 CU control_unit(
@@ -63,7 +64,5 @@ b B_register(
     .outbit(),
     .q()
 );
-
-
 
 endmodule
