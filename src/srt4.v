@@ -5,31 +5,64 @@ module srt4 (
     output endSignal
 );
 
-wire [16:0]csingals; 
+
+wire [16:0]control_signals_wire;
 
 CU control_unit(
-    .beginSignal(beginSignal),
-    .rst_b(rst_b),
-    .clk(clk),
+    .beginSignal(),
+    .rst_b(),
+    .clk(),
     .b7(),
     .b(),
     .msbp(),
     .cnt1(),
-    .p8(),
-    .cnt2(),
-    .endSignal(endSignal),
-    .control_signals(csingals) 
+    .endSignal(),
+    .control_signals()
 );
 
 p P_register(
-    .c0(csingals[0]),
-    .c2(csingals[2]),
-    .c3(csingals[3]),
-    .c8(csingals[8]),
-    .c14(csingals[14]),
-    .inbit(q_a[7:6]),//stabilim ulterior pt ca exista niste muxuri
-    .d(), //stabilim ulterior  
-    .outbit(), // cand shiftez cu 2 pozitii, o sa imi iasa 2 biti
-    .q() 
-)
+    .c0(control_signals_wire[0]),
+    .c2(control_signals_wire[2]),
+    .c3(control_signals_wire[3]),
+    .c8(control_signals_wire[8]),
+    .c14(control_signals_wire[14]),
+    .inbit(),
+    .d(),
+    .outbit(),
+    .q()
+);
+
+a A_register(
+    .c0(control_signals_wire[0]),
+    .c2(control_signals_wire[2]),
+    .c3(control_signals_wire[3]),
+    .c4(control_signals_wire[4]),
+    .c7(control_signals_wire[7]),
+    .c13(control_signals_wire[13]),
+    .inbit(),
+    .d(),
+    .outbit(),
+    .q()
+);
+
+aprim Aprim_register(
+    .c0(control_signals_wire[0]),
+    .c3(control_signals_wire[3]),
+    .c5(control_signals_wire[5]),
+    .c6(control_signals_wire[6]),
+    .c12(control_signals_wire[12]),
+    .inbit(),
+    .d(),
+    .outbit(),
+    .q()
+);
+
+b B_register(
+    .c0(control_signals_wire[0]),
+    .inbit(),
+    .d(),
+    .outbit(),
+    .q()
+);
+
 endmodule
