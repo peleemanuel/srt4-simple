@@ -1,5 +1,5 @@
 module p (
-  input c0,c2,c3,c8,c14,
+  input c0,c2,c3,c8,c13,c14,
   input [1:0]inbit,
   input [8:0]d, // intrarea pentru registru 
   //output reg [1:0]outbit, // cand shiftez cu 2 pozitii, o sa imi iasa 2 biti
@@ -13,7 +13,7 @@ always @(posedge c0 or posedge c2 or posedge c3 or posedge c8 or posedge c14) be
 
   else if(c2) begin
     q[8:1] <= q[7:0];
-    q[0] <= inbit[0];
+    q[0] <= inbit[1];
   end 
 
   else if(c3) begin
@@ -21,7 +21,7 @@ always @(posedge c0 or posedge c2 or posedge c3 or posedge c8 or posedge c14) be
     q[1:0] <= inbit;
   end
   
-  else if(c8) begin // nu mai trebuie tratat cazul de c9 sau c10
+  else if(c8 & ~c13) begin // nu mai trebuie tratat cazul de c9 sau c10
    q <= d;
   end
 

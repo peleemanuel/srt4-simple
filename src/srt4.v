@@ -19,7 +19,7 @@ wire [8:0] adder_i, adder_j, intermediate_adder_j;
 assign a_9_bits = {1'b0,a_out_wire};
 assign b_9_bits = (control_signals_wire[10]) ? {b_out_wire,1'b0} : {1'b0, b_out_wire};
 assign aprim_9_bits = {1'b0,aprim_out_wire};
-assign adder_j = (control_signals_wire[9]) ? (~intermediate_adder_j + 1) : intermediate_adder_j;
+assign adder_j = (control_signals_wire[4] | control_signals_wire[7]) ? (~intermediate_adder_j + 1) : intermediate_adder_j;
 assign a_in_wire_temp = (control_signals_wire[0]) ? inbus : 8'b0000_0000;
 assign a_in_wire = (control_signals_wire[0]) ? inbus : a_in_wire_temp;
 assign b_in_wire = (control_signals_wire[1]) ? inbus : 8'b0000_0000;
@@ -55,6 +55,7 @@ CU control_unit(
     .cnt1(cnt1),
     .p8(p_out_wire[8]),
     .cnt2(cnt2),
+    .state(),   
     .endSignal(endSignal),
     .control_signals(control_signals_wire)
 );
@@ -64,8 +65,9 @@ p P_register(
     .c2(control_signals_wire[2]),
     .c3(control_signals_wire[3]),
     .c8(control_signals_wire[8]),
+    .c13(control_signals_wire[13]),
     .c14(control_signals_wire[14]),
-    .inbit(pa_connect),
+    .inbit(a_out_wire[7:6]),
     .d(p_in_wire),
     //.outbit(),
     .q(p_out_wire)
@@ -79,7 +81,7 @@ a A_register(
     .c7(control_signals_wire[7]),
     .c13(control_signals_wire[13]),
     .rst_b(rst_b),
-    .inbit(ab_connect),
+    .inbit(b_out_wire[7:6]),
     .d(a_in_wire),
     .outbit(pa_connect),
     .q(a_out_wire)

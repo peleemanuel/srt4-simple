@@ -9,6 +9,7 @@ module CU (
     input p8,
     input [2:0] cnt2,
     output reg endSignal,
+    output reg [4:0] state,
     output reg [16:0] control_signals 
 );
 
@@ -44,7 +45,7 @@ localparam f2 = 3'b010;
 localparam fn1 = 3'b101;
 localparam fn2 = 3'b110;
 
-reg [4:0] state, state_next;
+reg [4:0] state_next;
 wire [2:0] f;
 
 funtable srt4table(
