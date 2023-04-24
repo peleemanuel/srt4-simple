@@ -10,6 +10,7 @@ module CU (
     input [2:0] cnt2,
     output reg endSignal,
     output reg [4:0] state,
+    output reg preload_adder,
     output reg [16:0] control_signals 
 );
 
@@ -38,6 +39,7 @@ localparam S21 = 5'b10101;
 localparam S22 = 5'b10110;
 localparam S23 = 5'b10111;
 localparam S24 = 5'b11000;
+localparam SPreload = 5'b11001;
 
 localparam f0 = 3'b000;
 localparam f1 = 3'b001;
@@ -93,9 +95,10 @@ always @(*) begin
         S16 : state_next = S5;
         S17 : begin
             if(p8) state_next = S18;
-            else state_next = S19;
+            else state_next = SPreload;
         end
-        S18 : state_next = S19;
+        S18 : state_next = SPreload;
+        SPreload : state_next = S19;
         S19 : state_next = S20;
         S20 : begin
             if(~cnt2[0] & ~cnt2[1] & ~cnt2[2]) state_next = S22;
@@ -111,6 +114,7 @@ end
 always @(*) begin
     control_signals = 17'b0_0000_0000_0000_0000;
     endSignal = 1'b0;
+    preload_adder = 1'b0;
     case (state)
         S1 : control_signals[0] = 1; 
         S2 : control_signals[1] = 1; 
@@ -160,7 +164,7 @@ always @(*) begin
         S22 : control_signals[15] = 1;
         S23 : control_signals[16] = 1;
         S24 : endSignal = 1;
-       
+        SPreload : preload_adder = 1;
     endcase
 end
 endmodule

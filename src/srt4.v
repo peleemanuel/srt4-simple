@@ -5,6 +5,7 @@ module srt4 (
     output endSignal
 );
 
+wire preload_adder_wire;
 
 wire [16:0]control_signals_wire;
 wire [8:0] p_in_wire, p_out_wire;
@@ -20,10 +21,16 @@ assign a_9_bits = {1'b0,a_out_wire};
 assign b_9_bits = (control_signals_wire[10]) ? {b_out_wire,1'b0} : {1'b0, b_out_wire};
 assign aprim_9_bits = {1'b0,aprim_out_wire};
 assign adder_j = (control_signals_wire[4] | control_signals_wire[7]) ? (~intermediate_adder_j + 1) : intermediate_adder_j;
-assign a_in_wire_temp = (control_signals_wire[0]) ? inbus : 8'b0000_0000;
-assign a_in_wire = (control_signals_wire[0]) ? inbus : a_in_wire_temp;
+//assign a_in_wire_temp = (control_signals_wire[13]) ? adder_out[7:0] : 8'b0000_0000;
+assign a_in_wire = (control_signals_wire[0]) ? inbus : adder_out[7:0];
 assign b_in_wire = (control_signals_wire[1]) ? inbus : 8'b0000_0000;
 
+/*always @(*) begin
+    a_in_wire = 8'b0000_0000;
+    if(control_signals_wire[0]) a_in_wire = inbus;
+    else a_in_wire = adder_out[7:0];
+end
+*/
 always @(*) begin
     outbus = 8'b0000_0000;
     if(control_signals_wire[15])
@@ -55,7 +62,8 @@ CU control_unit(
     .cnt1(cnt1),
     .p8(p_out_wire[8]),
     .cnt2(cnt2),
-    .state(),   
+    .state(),
+    .preload_adder(preload_adder_wire),   
     .endSignal(endSignal),
     .control_signals(control_signals_wire)
 );
@@ -110,21 +118,21 @@ b B_register(
 wire dump;
 
 demux demux1(
-    .sel(control_signals_wire[13]),
+    .sel(preload_adder_wire | control_signals_wire[13]),
     .data_in(adder_out),
     .data_out0(p_in_wire),
     .data_out1({dump, a_in_wire_temp})
 );
 
 mux muxj(
-    .sel(control_signals_wire[13]),
+    .sel(preload_adder_wire | control_signals_wire[13]),
     .data_in0(b_9_bits),
     .data_in1(aprim_9_bits),
     .data_out(intermediate_adder_j)
 );
 
 mux muxi(
-    .sel(control_signals_wire[13]),
+    .sel(preload_adder_wire | control_signals_wire[13]),
     .data_in0(p_out_wire),
     .data_in1(a_9_bits),
     .data_out(adder_i)
