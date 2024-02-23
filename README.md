@@ -1,10 +1,15 @@
 # srt4-simple
 
-How to compile:
-iverilog -o <nume_fisier>.vvp <nume_fisier>.v <restul_de_fisiere>.v
+The goal of this project is to try to make from scratch the SRT4 calculator purely in verilog.
+This is an academic project made for the Computer Organization subject. 
 
-How to run:
-vvp <nume_fisier>.vvp
+## Usage
 
-How to view waves:
-gtkwave <nume_fisier>.vcd
+### How to compile:
+iverilog -o <file_name>.vvp <file_name>.v <rest_of_files>.v
+
+### How to run:
+vvp <file_name>.vvp
+
+### How to view waves:
+gtkwave <file_name>.vcd
